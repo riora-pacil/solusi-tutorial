@@ -5,6 +5,7 @@ import java.util.NoSuchElementException;
 
 import apap.tutorial.gopud.model.MenuModel;
 import apap.tutorial.gopud.service.MenuService;
+import org.springframework.beans.factory.UnsatisfiedDependencyException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
@@ -121,7 +122,10 @@ public class RestoranController {
         try{
             restoranService.deleteRestoran(idRestoran);
         }catch (NoSuchElementException e){
-            model.addAttribute("idRestoran", idRestoran);
+            model.addAttribute("errorMessage", "Id " +  idRestoran.toString() + " tidak ditemukan");
+            return "delete-restoran-error";
+        }catch (UnsupportedOperationException e){
+            model.addAttribute("errorMessage", "Tidak berhasil dihapus karena restoran memiliki menu!");
             return "delete-restoran-error";
         }
         return "delete-restoran";

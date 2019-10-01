@@ -2,6 +2,7 @@ package apap.tutorial.gopud.service;
 
 import apap.tutorial.gopud.model.RestoranModel;
 import apap.tutorial.gopud.repository.RestoranDb;
+import org.springframework.beans.factory.UnsatisfiedDependencyException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -54,6 +55,11 @@ public class RestoranServiceImpl implements RestoranService{
     @Override
     public void deleteRestoran(Long idRestoran) {
         RestoranModel restoran = getRestoranByIdRestoran(idRestoran);
-        restoranDb.delete(restoran);
+        if(restoran.getListMenu().size()==0){
+            restoranDb.delete(restoran);
+        }else{
+            UnsupportedOperationException unsupportedOperationException = new UnsupportedOperationException();
+            throw unsupportedOperationException;
+        }
     }
 }
